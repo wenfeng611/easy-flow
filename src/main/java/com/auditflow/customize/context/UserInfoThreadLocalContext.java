@@ -15,9 +15,10 @@ public final class UserInfoThreadLocalContext {
     }
 
     public static User init_user() {
-        User user = new User();
-        user.setUsername("testUser");
-        return user;
+        User userTest = new User();
+        userTest.setUsername("testUser");
+        user.set(userTest);
+        return userTest;
     }
 
     public static void clear_user() {

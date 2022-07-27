@@ -1,5 +1,6 @@
 package com.auditflow.customize.config;
 
+import com.auditflow.customize.interceptor.CrossInterceptorHandler;
 import com.auditflow.customize.interceptor.GlobalInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new CrossInterceptorHandler()).addPathPatterns("/**");
         registry.addInterceptor(new GlobalInterceptor()).addPathPatterns("/**");
     }
 }

@@ -8,7 +8,7 @@ public  interface AuditStreamEnums {
 
     //场景code枚举 跟业务对应上
     enum SenceCodeEnums {
-        MATERIAL("material","素材审核");
+        MATERIAL("material","测试审核");
         private String senceCode;
         private String description;
 

@@ -72,7 +72,7 @@ CREATE TABLE `xc_audit_node` (
   `creater_name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '创建人名称',
   `audit_userids` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '人员id ,隔开',
   `is_valid` tinyint(2) NOT NULL DEFAULT '0' COMMENT '有效状态 0 前台不展示 1 前后台都展示',
-  `job_numbers` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '人员的工号id  , 隔开'
+  `user_ids` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '人员的工号id  , 隔开'
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='审核节点';
 
