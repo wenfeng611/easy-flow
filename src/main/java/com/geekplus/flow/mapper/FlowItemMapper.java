@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface FlowItemMapper extends BaseDao<FlowItemEntity>{
 
-    void updateFlowItemStatusAndNodeId(@Param("flow_status") Integer flowStatus, @Param("nodeId") String currentNodeId, @Param("id") Integer id);
+    void updateFlowItemStatusAndNodeId(@Param("flowStatus") Integer flowStatus, @Param("nodeId") String currentNodeId, @Param("id") Integer id);
 
     FlowItemEntity findById(@Param("id") Integer id);
 

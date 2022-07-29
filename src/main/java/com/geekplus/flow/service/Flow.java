@@ -166,6 +166,7 @@ public class Flow {
                 .flowId(0)
                 .currentNodeId("")
                 .sceneCode(sceneCode)
+                .flowStatus(FlowEnums.FlowItemStatusEnums.INIT.getCode())
                 .createrName(username)
                 .createTime(new Date())
                 .updateTime(new Date())
