@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geekplus.flow.mapper.FlowItemDetailMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.geekplus.flow.entity.FlowItemDetailEntity" id="flowItemDetailMap">
+        <id property="id" jdbcType="INTEGER" column="id"/>
+        <result property="flowItemId" column="flow_item_id"/>
+        <result property="operateUsername" column="operate_username"/>
+        <result property="operateInfo" column="operate_info"/>
+        <result property="currentG6NodeId" column="current_g6_node_id"/>
+        <result property="currentG6NodeLabel" column="current_g6_node_label"/>
+        <result property="nextG6NodeId" column="next_g6_node_id"/>
+        <result property="nextG6NodeLabel" column="next_g6_node_label"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="base_colum">
+			id,
+			`flow_item_id`,
+			`operate_username`,
+			`operate_info`,
+			`current_g6_node_id`,
+			`current_g6_node_label`,
+			`next_g6_node_id`,
+			`next_g6_node_label`,
+			`create_time`
+	</sql>
+
+    <insert id="save" parameterType="com.geekplus.flow.entity.FlowItemDetailEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into t_flow_item_detail
+		(
+        <if test="flowItemId!=null and flowItemId!=0">`flow_item_id`,</if>
+		<if test="operateUsername!=null and operateUsername!=''">`operate_username`,</if>
+		<if test="operateInfo!=null and operateInfo!=''">`operate_info`,</if>
+		<if test="currentG6NodeId!=null and currentG6NodeId!=''">`current_g6_node_id`,</if>
+		<if test="currentG6NodeLabel!=null and currentG6NodeLabel!=''">`current_g6_node_label`,</if>
+		<if test="nextG6NodeId!=null and nextG6NodeId!=''">`next_g6_node_id`,</if>
+		<if test="nextG6NodeLabel!=null and nextG6NodeLabel!=''">`next_g6_node_label`,</if>
+			`create_time`
+		)
+		values
+		(
+		<if test="flowItemId!=null and flowItemId!=0"> #{flowItemId},</if>
+		<if test="operateUsername!=null and operateUsername!=''">#{operateUsername},</if>
+		<if test="operateInfo!=null and operateInfo!=''">#{operateInfo},</if>
+		<if test="currentG6NodeId!=null and currentG6NodeId!=''">#{currentG6NodeId},</if>
+		<if test="currentG6NodeLabel!=null and currentG6NodeLabel!=''">#{currentG6NodeLabel},</if>
+		<if test="nextG6NodeId!=null and nextG6NodeId!=''">#{nextG6NodeId},</if>
+		<if test="nextG6NodeLabel!=null and nextG6NodeLabel!=''">#{nextG6NodeLabel},</if>
+			#{createTime}
+		)
+    </insert>
+
+
+    <select id="selectFlowItemDetails" resultMap="flowItemDetailMap">
+		select <include refid="base_colum"></include> from t_flow_item_detail where flow_item_id = #{flowItemId}
+	</select>
+
+</mapper>

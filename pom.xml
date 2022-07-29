@@ -8,8 +8,8 @@
         <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.auditflow</groupId>
-    <artifactId>customize</artifactId>
+    <groupId>com.geekplus</groupId>
+    <artifactId>flow</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>customize</name>
     <description>Demo project for Spring Boot</description>

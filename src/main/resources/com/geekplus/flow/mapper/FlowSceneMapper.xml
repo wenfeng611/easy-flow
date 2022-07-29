@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.geekplus.flow.mapper.FlowSceneMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.geekplus.flow.entity.FlowSceneEntity" id="senceMap">
+        <id property="id" jdbcType="INTEGER" column="id"/>
+        <result property="sceneName" column="scene_name"/>
+        <result property="sceneCode" column="scene_code"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createrName" column="creater_name"/>
+		<result property="isValid" column="is_valid"/>
+    </resultMap>
+
+	<sql id="base_colum">
+			id,
+			`scene_name`,
+			`scene_code`,
+			`create_time`,
+			`update_time`,
+			`creater_name`,
+			 `is_valid`
+	</sql>
+
+    <insert id="save" parameterType="com.geekplus.flow.entity.FlowSceneEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into t_flow_scene
+		(
+			`scene_name`,
+			`scene_code`,
+			`create_time`,
+			`update_time`,
+			`creater_name`,
+			 `is_valid`
+		)
+		values
+		(
+			#{sceneName},
+			#{sceneCode},
+			#{createTime},
+			#{updateTime},
+			#{createrName},
+			#{isValid}
+		)
+    </insert>
+
+	<select id="selectAll" resultMap="senceMap">
+		select <include refid="base_colum"/> from t_flow_scene where is_valid = 1
+	</select>
+
+	<select id="queryPage" resultMap="senceMap">
+		select <include refid="base_colum"/> from t_flow_scene where 1=1
+		<if test="name!=null and name!=''">
+			and scene_name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="sceneCode!=null and sceneCode!=''">
+			and scene_code like CONCAT('%',#{sceneCode},'%')
+		</if>
+		limit #{pagenum},#{pagesize}
+	</select>
+
+	<select id="countByQuery" resultType="java.lang.Integer">
+		select count(*) from t_flow_scene where 1=1
+		<if test="name!=null and name!=''">
+			and scene_name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="sceneCode!=null and sceneCode!=''">
+			and scene_code like CONCAT('%',#{sceneCode},'%')
+		</if>
+	</select>
+
+	<select id="findByCode" resultMap="senceMap">
+		select id from t_flow_scene where scene_code = #{sceneCode} limit 1
+	</select>
+
+	<update id="updateScene">
+		update t_flow_scene
+		set scene_name=#{sceneName},scene_code=#{sceneCode}
+		where id=#{id}
+	</update>
+
+	<update id="updateValid">
+		update t_flow_scene
+		set is_valid=#{isValid}
+		where id=#{id}
+	</update>
+</mapper>
