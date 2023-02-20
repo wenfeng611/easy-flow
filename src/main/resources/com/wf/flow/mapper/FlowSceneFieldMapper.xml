@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.flow.mapper.FlowSceneFieldMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wf.flow.entity.FlowSceneFieldEntity" id="senceFieldMap">
+        <id property="id" jdbcType="INTEGER" column="id"/>
+        <result property="fieldDescription" column="field_description"/>
+        <result property="fieldName" column="field_name"/>
+        <result property="sceneCode" column="scene_code"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createrName" column="creater_name"/>
+		<result property="isValid" column="is_valid"/>
+    </resultMap>
+
+    <sql id="base_colum">
+			id,
+			`field_description`,
+			`field_name`,
+			`scene_code`,
+			`create_time`,
+			`creater_name`,
+			`is_valid`
+	</sql>
+
+    <insert id="save" parameterType="com.wf.flow.entity.FlowSceneEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into t_flow_scene_field
+		(
+			`field_description`,
+			`field_name`,
+			`scene_code`,
+			`create_time`,
+			`creater_name`,
+			`is_valid`
+		)
+		values
+		(
+			#{fieldDescription},
+			#{fieldName},
+			#{sceneCode},
+			#{createTime},
+			#{createrName},
+			#{isValid}
+		)
+    </insert>
+
+    <select id="selectFieldByScene" resultMap="senceFieldMap">
+        select <include refid="base_colum"/> from t_flow_scene_field where scene_code=#{sceneCode} and is_valid =1
+    </select>
+
+	<select id="queryAllByScene" resultMap="senceFieldMap">
+		select <include refid="base_colum"/> from t_flow_scene_field where scene_code=#{sceneCode}
+	</select>
+	<select id="countAllByScene" resultType="java.lang.Integer">
+		select count(*) from t_flow_scene_field where scene_code=#{sceneCode}
+	</select>
+
+	<update id="updateValid">
+		update t_flow_scene_field
+		set is_valid=#{isValid}
+		where id=#{id}
+	</update>
+</mapper>

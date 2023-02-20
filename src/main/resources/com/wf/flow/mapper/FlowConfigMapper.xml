@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.flow.mapper.FlowConfigMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wf.flow.entity.FlowConfigEntity" id="flowConfigMap">
+        <id property="id" jdbcType="INTEGER" column="id"/>
+        <result property="flowName" column="flow_name"/>
+        <result property="status" column="status"/>
+        <result property="graphJson" column="graph_json"/>
+        <result property="sceneCode" column="scene_code"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createrName" column="creater_name"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="sceneName" column="scene_name"/>
+    </resultMap>
+
+    <sql id="base_colum">
+			flow.id,
+			flow.`flow_name`,
+			flow.`status`,
+			flow.`graph_json`,
+			flow.`scene_code`,
+			flow.`create_time`,
+			flow.`creater_name`,
+			flow.`update_time`
+	</sql>
+
+    <insert id="save" parameterType="com.wf.flow.entity.FlowConfigEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into t_flow_config
+		(
+			`flow_name`,
+			`status`,
+			`graph_json`,
+			`scene_code`,
+			`create_time`,
+			`creater_name`,
+			`update_time`
+		)
+		values
+		(
+			#{flowName},
+			#{status},
+			#{graphJson},
+			#{sceneCode},
+			#{createTime},
+			#{createrName},
+			#{updateTime}
+		)
+    </insert>
+
+	<select id="findBySceneCode" resultMap="flowConfigMap">
+			select <include refid="base_colum"/> from t_flow_config flow where flow.scene_code=#{sceneCode} and flow.status =1
+	</select>
+
+	<select id="findTopById" resultMap="flowConfigMap">
+		select <include refid="base_colum"/> from t_flow_config flow where flow.id=#{id}
+	</select>
+
+	<select id="queryPage" resultMap="flowConfigMap">
+		select <include refid="base_colum"/> ,scene.scene_name
+		from t_flow_config flow
+		left join t_flow_scene scene on flow.scene_code = scene.scene_code
+		 where 1=1
+		<if test="name!=null and name!=''">
+			and flow.flow_name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="flowStatus!=null and flowStatus!=-1">
+			and flow.`status` = #{flowStatus}
+		</if>
+		limit #{pagenum},#{pagesize}
+	</select>
+
+	<select id="countByQuery" resultType="java.lang.Integer">
+		select count(*) from t_flow_config where 1=1
+		<if test="name!=null and name!=''">
+			and flow_name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="flowStatus!=null and flowStatus!=-1">
+			and `status` = #{flowStatus}
+		</if>
+	</select>
+
+	<update id="updateStatus">
+		update t_flow_config
+		set status=#{status}
+		where id=#{id}
+	</update>
+
+	<update id="updateFlow">
+		update t_flow_config
+		set flow_name=#{flowName},scene_code=#{sceneCode},update_time=now()
+		where id=#{id}
+	</update>
+
+	<update id="updateFlowGraph">
+		update t_flow_config
+		set graph_json=#{graphJson},update_time=now()
+		where id=#{id}
+	</update>
+
+</mapper>

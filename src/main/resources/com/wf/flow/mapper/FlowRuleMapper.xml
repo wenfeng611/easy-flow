@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.flow.mapper.FlowRuleMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wf.flow.entity.FlowRuleEntity" id="flowRuleMap">
+        <id property="id" jdbcType="INTEGER" column="id"/>
+        <result property="autoJudgeRule" column="auto_judge_rule"/>
+        <result property="flowId" column="flow_id"/>
+        <result property="g6nodeId" column="g6node_id"/>
+        <result property="nodeType" column="node_type"/>
+        <result property="createTime" column="create_time"/>
+		<result property="createrName" column="creater_name"/>
+		<result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="base_colum">
+			id,
+			`auto_judge_rule`,
+			`flow_id`,
+			`g6node_id`,
+			`node_type`,
+			`create_time`,
+			`creater_name`,
+			`update_time`
+	</sql>
+
+    <insert id="save" parameterType="com.wf.flow.entity.FlowRuleEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into t_flow_rule
+		(
+			`auto_judge_rule`,
+			`flow_id`,
+			`g6node_id`,
+			`node_type`,
+			`create_time`,
+			`creater_name`,
+			`update_time`
+		)
+		values
+		(
+			#{autoJudgeRule},
+			#{flowId},
+			#{g6nodeId},
+			#{nodeType},
+			#{createTime},
+			#{createrName},
+			#{updateTime}
+		)
+    </insert>
+    <update id="updateRule">
+		update t_flow_rule
+		set 
+			auto_judge_rule=#{autoJudgeRule},
+		 	update_time=now()
+		where id=#{id}
+	</update>
+
+    <select id="findByFlowIdAndNodeId" resultMap="flowRuleMap">
+		select <include refid="base_colum"/> from t_flow_rule where flow_id=#{flowId} and  g6node_id=#{nodeId} limit 1
+	</select>
+
+	<select id="findByFlowIdAndNodeType" resultMap="flowRuleMap">
+		select <include refid="base_colum"/> from t_flow_rule where flow_id=#{flowId} and  node_type=#{nodeType} limit 1
+	</select>
+
+	<select id="findByFlowIdAndNodeTypeInsIn" resultMap="flowRuleMap">
+		select <include refid="base_colum"/> from t_flow_rule where node_type=#{nodeType}
+		and `flow_id`  in
+		<foreach collection="list" open="(" close=")" item="item" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
+
+</mapper>
