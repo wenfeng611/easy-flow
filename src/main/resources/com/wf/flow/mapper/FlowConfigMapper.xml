@@ -51,7 +51,7 @@
     </insert>
 
 	<select id="findBySceneCode" resultMap="flowConfigMap">
-			select <include refid="base_colum"/> from t_flow_config flow where flow.scene_code=#{sceneCode} and flow.status =1
+			select <include refid="base_colum"/> from t_flow_config flow where flow.scene_code=#{sceneCode} and flow.status =1 limit 1
 	</select>
 
 	<select id="findTopById" resultMap="flowConfigMap">
@@ -69,7 +69,7 @@
 		<if test="flowStatus!=null and flowStatus!=-1">
 			and flow.`status` = #{flowStatus}
 		</if>
-		limit #{pagenum},#{pagesize}
+		limit #{pagenum},#{pageSize}
 	</select>
 
 	<select id="countByQuery" resultType="java.lang.Integer">
@@ -81,8 +81,11 @@
 			and `status` = #{flowStatus}
 		</if>
 	</select>
+    <select id="selectScriptContent" resultType="java.lang.String">
+	   select script_entry from t_common_script where script_code=#{scriptCode} limit 1;
+	</select>
 
-	<update id="updateStatus">
+    <update id="updateStatus">
 		update t_flow_config
 		set status=#{status}
 		where id=#{id}

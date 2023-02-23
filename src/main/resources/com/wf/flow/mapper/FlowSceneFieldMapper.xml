@@ -45,6 +45,31 @@
 		)
     </insert>
 
+	<insert id="saveBatch" parameterType="com.wf.flow.entity.FlowSceneEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into t_flow_scene_field
+		(
+			`field_description`,
+			`field_name`,
+			`scene_code`,
+			`create_time`,
+			`creater_name`,
+			`is_valid`
+		)
+		values
+		<foreach collection="list" index="index" item="item"
+				 separator=",">
+			(
+			#{item.fieldDescription},
+			#{item.fieldName},
+			#{item.sceneCode},
+			#{item.createTime},
+			#{item.createrName},
+			#{item.isValid}
+			)
+		</foreach>
+		;
+    </insert>
+
     <select id="selectFieldByScene" resultMap="senceFieldMap">
         select <include refid="base_colum"/> from t_flow_scene_field where scene_code=#{sceneCode} and is_valid =1
     </select>

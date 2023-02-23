@@ -1,7 +1,7 @@
 package com.wf.flow.entity;
 
-import com.wf.flow.model.GNode;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.wf.flow.model.GNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

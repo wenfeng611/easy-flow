@@ -11,6 +11,13 @@
         <result property="createrName" column="creater_name"/>
 		<result property="createTime" column="create_time"/>
 		<result property="isValid" column="is_valid"/>
+		<result property="functionType" column="function_type"/>
+		<result property="scriptContent" column="script_content"/>
+		<result property="executeType" column="execute_type"/>
+		<result property="outputParams" column="output_params"/>
+		<result property="inputParams" column="input_params"/>
+		<result property="groupName" column="group_name"/>
+		<result property="nodeDes" column="node_des"/>
     </resultMap>
 
     <sql id="base_colum">
@@ -19,7 +26,14 @@
 			`type`,
 			`creater_name`,
 			`create_time`,
-			`is_valid`
+			`is_valid`,
+			function_type,
+			script_content,
+			execute_type,
+			`output_params`,
+			input_params,
+			group_name,
+			node_des
 	</sql>
 
     <insert id="save" parameterType="com.wf.flow.entity.FlowNodeEntity" useGeneratedKeys="true" keyProperty="id">
@@ -29,7 +43,13 @@
 			`type`,
 			`creater_name`,
 			`create_time`,
-			`is_valid`
+			`is_valid`,
+			`output_params`,
+			input_params,
+			function_type,
+			execute_type,
+			group_name,
+			node_des
 		)
 		values
 		(
@@ -37,7 +57,13 @@
 			#{type},
 			#{createrName},
 			#{createTime},
-			#{isValid}
+			#{isValid},
+			#{outputParams},
+			#{inputParams},
+			#{functionType},
+			#{executeType},
+			#{groupName},
+			#{nodeDes}
 		)
     </insert>
 
@@ -54,7 +80,7 @@
 		<if test="name!=null and name!=''">
 			and node_name like CONCAT('%',#{name},'%')
 		</if>
-		limit #{pagenum},#{pagesize}
+		limit #{pagenum},#{pageSize}
 	</select>
 
 	<select id="countByQuery" resultType="java.lang.Integer">
@@ -62,6 +88,12 @@
 		<if test="name!=null and name!=''">
 			and node_name like CONCAT('%',#{name},'%')
 		</if>
+	</select>
+    <select id="findTopByType" resultMap="nodeMap">
+		select <include refid="base_colum"/> from t_flow_node where `type`=#{type}
+	</select>
+	<select id="findAllTypes" resultType="java.lang.String">
+		select distinct( `type`) from t_flow_node;
 	</select>
 
 	<update id="updateNode">

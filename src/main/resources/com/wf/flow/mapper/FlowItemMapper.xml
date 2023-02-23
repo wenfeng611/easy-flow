@@ -14,7 +14,11 @@
         <result property="createrName" column="creator"/>
 		<result property="sceneCode" column="scene_code"/>
 		<result property="flowName" column="flow_name"/>
-		<result property="formUrl" column="form_url"/>
+		<result property="businessCustomId" column="business_custom_id"/>
+		<result property="paramsJson" column="params_json"/>
+		<result property="parentNodeIds" column="parent_node_ids"/>
+		<result property="parentFlowIds" column="parent_flow_ids"/>
+		<result property="nodeType" column="node_type"/>
 
     </resultMap>
 
@@ -25,7 +29,13 @@
 			`flow_status`,
 			`add_time`,
 			`update_time`,
-			`creator`
+			`creator`,
+			business_custom_id,
+			params_json,
+			parent_node_ids,
+			parent_flow_ids,
+			scene_code,
+			node_type
 	</sql>
 
     <insert id="save" parameterType="com.wf.flow.entity.FlowItemEntity" useGeneratedKeys="true" keyProperty="id">
@@ -37,7 +47,8 @@
 			`add_time`,
 			`update_time`,
 			`creator`,
-			scene_code
+			scene_code,
+			business_custom_id
 		)
 		values
 		(
@@ -47,7 +58,8 @@
 			#{createTime},
 			#{updateTime},
 			#{createrName},
-			#{sceneCode}
+			#{sceneCode},
+			#{businessCustomId}
 		)
     </insert>
 
@@ -60,7 +72,8 @@
 			`add_time`,
 			`update_time`,
 			`creator`,
-			scene_code
+			scene_code,
+			business_custom_id
 		)
 		values
 		<foreach collection="list" index="index" item="item"
@@ -72,7 +85,8 @@
 			#{item.createTime},
 			#{item.updateTime},
 			#{item.createrName},
-			#{item.sceneCode}
+			#{item.sceneCode},
+			#{businessCustomId}
 			)
 		</foreach>
 		;
@@ -95,6 +109,48 @@
 		set update_time=now(),flow_id=#{flowId}
 		where id=#{id}
 	</update>
+	<update id="updateFlowItemStatusAndNodeIdWithParams">
+		update t_flow_item
+		set update_time=now()
+		<if test="nodeId!= null">
+			,current_node_id=#{nodeId}
+		</if>
+		<if test="nodeType!= null and nodeType!=''">
+			,node_type=#{nodeType}
+		</if>
+		<if test="flowStatus!= null and flowStatus!= 0">
+			,flow_status=#{flowStatus}
+		</if>
+		<if test="paramsJson!= null and paramsJson!= ''">
+			,params_json=#{paramsJson}
+		</if>
+		where id=#{id}
+	</update>
+	<update id="updateParentNodeFlowIds">
+		update t_flow_item
+		set update_time=now(),parent_node_ids=#{parentNodeIds},parent_flow_ids=#{parentFlowIds},flow_id=#{currentFlowId},scene_code=#{sceneCode}
+		where id=#{id}
+	</update>
+	<update id="update">
+		update t_flow_item
+		set update_time=now()
+		<if test="flowId!= null and flowId!= 0">
+			,flow_id=#{flowId}
+		</if>
+		<if test="currentNodeId!= null">
+			,current_node_id=#{currentNodeId}
+		</if>
+		<if test="parentNodeIds!= null">
+			,parent_node_ids=#{parentNodeIds}
+		</if>
+		<if test="parentFlowIds!= null">
+			,parent_flow_ids=#{parentFlowIds}
+		</if>
+		<if test="sceneCode!= null">
+			,scene_code=#{sceneCode}
+		</if>
+		where id=#{id}
+	</update>
 
 	<select id="findById" resultMap="flowItemMap">
         select <include refid="base_colum"></include> from t_flow_item where id=#{id} limit 1
@@ -114,7 +170,7 @@
 			i.`creator`,
 			f.flow_name,
 			i.scene_code,
-			f.form_url
+			i.business_custom_id
 		from t_flow_item i
 		left join t_flow_config f on f.id=i.flow_id
 		where 1=1
@@ -137,6 +193,27 @@
 		<foreach collection="dataList" item="item" open="(" separator="," close=")">
 			#{item}
 		</foreach>
+	</select>
+	<select id="findByCustomId" resultMap="flowItemMap">
+		select <include refid="base_colum"></include> from t_flow_item where business_custom_id=#{customId} order by id desc limit 1
+	</select>
+    <select id="countFlowItems" resultType="java.lang.Long">
+		select count(*)
+		from t_flow_item i
+		left join t_flow_config f on f.id=i.flow_id
+		where 1=1
+		<if test="sceneCode!=null and sceneCode!=''">
+			and f.scene_code = #{sceneCode}
+		</if>
+		<if test="flowId!=null and flowId!=0">
+			and i.flow_id=#{flowId}
+		</if>
+		<if test="businessId!=null and businessId!=0">
+			and i.id=#{businessId}
+		</if>
+		<if test="flowStatus!=null and flowStatus!=0">
+			and i.flow_status=#{flowStatus}
+		</if>
 	</select>
 
 </mapper>

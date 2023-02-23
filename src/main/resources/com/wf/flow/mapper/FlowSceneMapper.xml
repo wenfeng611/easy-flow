@@ -57,7 +57,7 @@
 		<if test="sceneCode!=null and sceneCode!=''">
 			and scene_code like CONCAT('%',#{sceneCode},'%')
 		</if>
-		limit #{pagenum},#{pagesize}
+		limit #{pagenum},#{pageSize}
 	</select>
 
 	<select id="countByQuery" resultType="java.lang.Integer">

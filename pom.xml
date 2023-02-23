@@ -21,6 +21,7 @@
         <javatuples.version>1.2</javatuples.version>
         <pagehelper.version>5.1.2</pagehelper.version>
         <apache.commons>3.8.1</apache.commons>
+        <version.groovy>3.0.5</version.groovy>
     </properties>
     <dependencies>
         <dependency>
@@ -79,6 +80,16 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${apache.commons}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${version.groovy}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutz</artifactId>
+            <version>1.r.60</version>
         </dependency>
     </dependencies>
 

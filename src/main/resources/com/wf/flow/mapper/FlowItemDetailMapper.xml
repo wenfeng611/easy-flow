@@ -57,5 +57,8 @@
     <select id="selectFlowItemDetails" resultMap="flowItemDetailMap">
 		select <include refid="base_colum"></include> from t_flow_item_detail where flow_item_id = #{flowItemId}
 	</select>
+    <select id="countFlowItemDetails" resultType="java.lang.Long">
+		select count(*) from t_flow_item_detail where flow_item_id = #{flowItemId}
+	</select>
 
 </mapper>

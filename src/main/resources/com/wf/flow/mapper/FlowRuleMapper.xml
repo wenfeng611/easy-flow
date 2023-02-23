@@ -72,5 +72,12 @@
 		</foreach>
 	</select>
 
+	<select id="findByFlowIdAndNodeIdsIn" resultMap="flowRuleMap">
+		select <include refid="base_colum"/> from t_flow_rule where flow_id=#{flowId} and  g6node_id in
+		<foreach collection="list" open="(" close=")" item="item" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
 
 </mapper>

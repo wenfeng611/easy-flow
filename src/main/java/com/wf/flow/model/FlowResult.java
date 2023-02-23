@@ -2,6 +2,9 @@ package com.wf.flow.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Map;
+
 /**
  * @author wenfeng.zhu
  * @description 流程返回统一结果
@@ -9,21 +12,35 @@ import lombok.Data;
  */
 
 @Data
-public class FlowResult {
+public class FlowResult implements Serializable {
 
-    private boolean success;   //是否成功  没有找到流程会失败 但是会记录下流程 以后可以在列表重新发起
+    private boolean success = true;   //是否成功  没有找到流程会失败 但是会记录下流程 以后可以在列表重新发起
     private String failReason; //失败原因
 
-    private Integer businessId;     //流程item的id 业务需要记录的id
+    private Object businessId;     //流程item的id
 
-    private Integer status;        //流程状态 FlowEnums.FlowItemStatusEnums
+    private Map<String,Object> outPutParams;
 
-    public static FlowResult fail(String failReason,Integer businessId,Integer status){
+    public static FlowResult fail(String failReason, Object businessId){
         FlowResult flowResult = new FlowResult();
         flowResult.setSuccess(false);
         flowResult.setFailReason(failReason);
         flowResult.setBusinessId(businessId);
-        flowResult.setStatus(status);
+        return flowResult;
+    }
+
+    public static FlowResult ok(Object businessId){
+        FlowResult flowResult = new FlowResult();
+        flowResult.setSuccess(true);
+        flowResult.setBusinessId(businessId);
+        return flowResult;
+    }
+
+    public static FlowResult ok(Object businessId,Map<String,Object> outPutParam){
+        FlowResult flowResult = new FlowResult();
+        flowResult.setSuccess(true);
+        flowResult.setBusinessId(businessId);
+        flowResult.setOutPutParams(outPutParam);
         return flowResult;
     }
 }

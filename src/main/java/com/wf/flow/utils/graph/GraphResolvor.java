@@ -2,7 +2,6 @@ package com.wf.flow.utils.graph;
 
 import com.alibaba.fastjson.JSON;
 import com.wf.flow.enums.FlowEnums;
-import com.wf.flow.exception.FlowException;
 import com.wf.flow.model.GEdge;
 import com.wf.flow.model.GNode;
 import com.wf.flow.model.GraphModel;
@@ -18,60 +17,6 @@ import java.util.Objects;
  * @date 2020/9/17 14:38
  */
 public class GraphResolvor {
-
-
-    /**
-     *  通过条件节点查找下一个node 第一个是条件节点 第二个是下一个节点
-     * @param graphJson  流程图数据
-     * @return
-     */
-    public static Pair<GNode,GNode> getFirstStartNode(String graphJson){
-        GraphModel graphModel = JSON.parseObject(graphJson, GraphModel.class);
-        List<GNode> nodes = graphModel.getNodes();
-        List<GEdge> edges = graphModel.getEdges();
-
-        //条件节点一定存在
-        GNode startNode =
-                nodes.stream().filter(node-> FlowEnums.FlowNodeTypeEnums.START.getCode().equals(node.getNodeType())).findFirst().orElse(null);
-
-        if(Objects.isNull(startNode)){
-            throw new FlowException("没有找到开始节点");
-        }
-        String g6ConditionNodeID = startNode.getId();
-
-        GEdge finalEdge = edges.stream().filter(edge -> g6ConditionNodeID.equals(edge.getSourceId())).findFirst().get();
-
-        //根据边的 targetID找到节点
-        return Pair.with(startNode,nodes.stream().
-                filter(node -> finalEdge.getTargetId().equals(node.getId()))
-                .findFirst()
-                .orElse(new GNode(FlowEnums.FlowNodeTypeEnums.END.getCode())));
-    }
-
-    /**
-     * 根据G6nodeid查找GNode
-     * @param graphJson  流程图数据
-     * @param nodeId     G6中node的id
-     * @return
-     */
-    public static GNode getNodeByG6NodeId(String graphJson,String nodeId){
-        GraphModel graphModel = JSON.parseObject(graphJson, GraphModel.class);
-        List<GNode> nodes = graphModel.getNodes();
-        return nodes.stream().filter(node -> nodeId.equals(node.getId())).findFirst().orElse(null);
-    }
-
-    //解析nodeId下面的第一个节点
-    public static GNode getFirstNextNodeBYG6NodeId(String graphJson,String nodeId){
-        GraphModel graphModel = JSON.parseObject(graphJson, GraphModel.class);
-        List<GNode> nodes = graphModel.getNodes();
-        List<GEdge> edges = graphModel.getEdges();
-
-        GEdge finalEdge = edges.stream().filter(edge -> nodeId.equals(edge.getSourceId())).findFirst().orElseGet(null);
-        //如果没找到边 直接默认结束节点
-        if(finalEdge == null) return new GNode(FlowEnums.FlowNodeTypeEnums.END.getCode());
-        //根绝边的 targetID找到节点
-        return nodes.stream().filter(node -> finalEdge.getTargetId().equals(node.getId())).findFirst().get();
-    }
 
     /**
      * 判断是否只有一个条件节点

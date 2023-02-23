@@ -34,8 +34,10 @@ public  interface FlowEnums {
         START("start","开始"),
         CONDITION("judge","判断"),
         END("end","结束"),
+        TRIGGER("trigger","触发"),
         TERMINAL("terminal","终止"),
-        WAITING("waiting","等待");
+        WAITING("waiting","等待"),
+        AUTO_NOTIFY("auto-notify","自动唤醒");
 
         private String code;
         private String description;

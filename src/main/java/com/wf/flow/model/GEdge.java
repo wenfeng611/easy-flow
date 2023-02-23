@@ -10,6 +10,8 @@ import lombok.Data;
 
 @Data
 public class GEdge {
-    private String sourceId;    //起始节点id  是G6生成的id
-    private String targetId;    //目标节点id  是G6生成的id
+    private String id;
+
+    private String source;    //起始节点id  是G6生成的id
+    private String target;    //目标节点id  是G6生成的id
 }

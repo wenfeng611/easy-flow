@@ -33,10 +33,13 @@ public class FlowItemEntity {
     private String createrName;        //创建人姓名
 
     private String sceneCode;
+    private String businessCustomId;
 
+    private String paramsJson;
+    private String parentNodeIds;
+    private String parentFlowIds;
+    private String nodeType;
 
     private String flowName;
-    private String formUrl;
-
     private Integer oldFlowItemId;
 }

@@ -3,7 +3,6 @@ package com.wf.flow.mapper;
 
 import com.wf.flow.entity.FlowSceneFieldEntity;
 import com.wf.flow.model.FlowQueryModel;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
  * @description
  */
 
-@Mapper
 public interface FlowSceneFieldMapper extends BaseDao<FlowSceneFieldEntity> {
 
     List<FlowSceneFieldEntity> selectFieldByScene(String sceneCode);
